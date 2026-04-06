@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Notice Board</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="public">
+    <header class="topbar">
+      <h1>Digital Notice Board System</h1>
+      <div class="actions">
+        <a class="btn" href="login.html">Admin Login</a>
+        <button id="fullscreenBtn" class="btn secondary">Full Screen</button>
+      </div>
+    </header>
+
+    <section class="ticker-container">
+      <span class="ticker-label">Latest Notice</span>
+      <div class="ticker">
+        <p id="tickerText">Loading latest notice...</p>
+      </div>
+    </section>
+
+    <main class="container">
+      <section class="filters">
+        <input id="searchInput" type="text" placeholder="Search by keyword" />
+        <select id="categoryFilter">
+          <option value="">All Categories</option>
+        </select>
+      </section>
+
+      <section>
+        <h2>Public Notices</h2>
+        <div id="noticeList" class="notice-grid"></div>
+      </section>
+    </main>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

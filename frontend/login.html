@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login - Digital Notice Board</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="login">
+    <main class="auth-wrapper">
+      <form id="loginForm" class="card auth-card">
+        <h1>Admin Login</h1>
+        <p class="muted">Login to manage notices.</p>
+
+        <label for="email">Email</label>
+        <input id="email" type="email" required placeholder="admin@example.com" />
+
+        <label for="password">Password</label>
+        <input id="password" type="password" required placeholder="••••••••" />
+
+        <button type="submit" class="btn">Login</button>
+        <p id="loginMessage" class="form-message"></p>
+
+        <a href="index.html" class="link">← Back to Public Board</a>
+      </form>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
