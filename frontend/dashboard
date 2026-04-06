@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - Digital Notice Board</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="dashboard">
+    <header class="topbar">
+      <h1>Admin Dashboard</h1>
+      <div class="actions">
+        <a href="index.html" class="btn secondary">View Public Board</a>
+        <button id="logoutBtn" class="btn danger">Logout</button>
+      </div>
+    </header>
+
+    <main class="container admin-layout">
+      <section class="card">
+        <h2 id="formTitle">Create Notice</h2>
+        <form id="noticeForm" class="form-grid">
+          <input id="noticeId" type="hidden" />
+
+          <label for="title">Title</label>
+          <input id="title" required maxlength="120" />
+
+          <label for="description">Description</label>
+          <textarea id="description" rows="5" required></textarea>
+
+          <label for="category">Category</label>
+          <input id="category" required maxlength="60" placeholder="Exam, Event, Holiday" />
+
+          <label for="priority">Priority</label>
+          <select id="priority">
+            <option>High</option>
+            <option selected>Medium</option>
+            <option>Low</option>
+          </select>
+
+          <label for="expiryDate">Expiry Date</label>
+          <input id="expiryDate" type="date" required />
+
+          <div class="form-actions">
+            <button type="submit" class="btn">Save Notice</button>
+            <button id="cancelEditBtn" type="button" class="btn secondary hidden">Cancel Edit</button>
+          </div>
+        </form>
+      </section>
+
+      <section>
+        <h2>Manage Notices</h2>
+        <div id="adminNoticeList" class="notice-grid"></div>
+      </section>
+    </main>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
