@@ -1,0 +1,101 @@
+const Notice = require('../models/Notice');
+
+const buildQuery = (keyword, category) => {
+  const query = {
+    $or: [{ expiryDate: { $gte: new Date() } }, { expiryDate: null }]
+  };
+
+  if (keyword) {
+    query.$and = [
+      {
+        $or: [
+          { title: { $regex: keyword, $options: 'i' } },
+          { description: { $regex: keyword, $options: 'i' } }
+        ]
+      }
+    ];
+  }
+
+  if (category) {
+    query.category = category;
+  }
+
+  return query;
+};
+
+exports.getNotices = async (req, res) => {
+  try {
+    const { keyword = '', category = '' } = req.query;
+    const notices = await Notice.find(buildQuery(keyword, category)).sort({
+      createdAt: -1
+    });
+
+    return res.status(200).json(notices);
+  } catch (error) {
+    return res.status(500).json({ message: 'Failed to fetch notices.' });
+  }
+};
+
+exports.createNotice = async (req, res) => {
+  try {
+    const { title, description, category, priority, expiryDate } = req.body;
+
+    if (!title || !description || !category || !expiryDate) {
+      return res.status(400).json({ message: 'All required fields must be provided.' });
+    }
+
+    const notice = await Notice.create({
+      title,
+      description,
+      category,
+      priority: priority || 'Low',
+      expiryDate
+    });
+
+    req.io.emit('notice_updated', { action: 'created', notice });
+
+    return res.status(201).json(notice);
+  } catch (error) {
+    return res.status(500).json({ message: 'Failed to create notice.' });
+  }
+};
+
+exports.updateNotice = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, category, priority, expiryDate } = req.body;
+
+    const notice = await Notice.findByIdAndUpdate(
+      id,
+      { title, description, category, priority, expiryDate },
+      { new: true, runValidators: true }
+    );
+
+    if (!notice) {
+      return res.status(404).json({ message: 'Notice not found.' });
+    }
+
+    req.io.emit('notice_updated', { action: 'updated', notice });
+
+    return res.status(200).json(notice);
+  } catch (error) {
+    return res.status(500).json({ message: 'Failed to update notice.' });
+  }
+};
+
+exports.deleteNotice = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const notice = await Notice.findByIdAndDelete(id);
+
+    if (!notice) {
+      return res.status(404).json({ message: 'Notice not found.' });
+    }
+
+    req.io.emit('notice_updated', { action: 'deleted', noticeId: id });
+
+    return res.status(200).json({ message: 'Notice deleted successfully.' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Failed to delete notice.' });
+  }
+};
